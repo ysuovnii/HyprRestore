@@ -2,7 +2,9 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <string> 
+#include <string>
+#include <algorithm>
+#include <cctype>
 using namespace std;
 using json = nlohmann::json;
 
@@ -50,10 +52,14 @@ int main()
     if(isBrowserApp(app, initialClass)) 
     {
       string site = "https://" + modifySite(initialTitle) + "";
-      script = "xdg-open \"" + site + "\"";
+      script = ("xdg-open \"" + site + "\"");
+
+      // transform(script.begin(), script.end(), script.begin(), [](unsigned char c){ return std::tolower(c); });
+      
     }
     else script = app + " &";
-
+    
+    transform(script.begin(), script.end(), script.begin(), [](unsigned char c){ return tolower(c); });
     
     int status = system(script.c_str());
     if(status != 0)
