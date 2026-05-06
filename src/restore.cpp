@@ -15,6 +15,18 @@ bool isBrowserApp(string className, string initialClass)
   return false;
 }
 
+string modifySite(string site) 
+{
+  for(int i = 0; i < site.size(); i++)
+  {
+    if(site[i] == '_')
+    {
+      site.erase(i--, 1);   
+    }
+  }
+  return site;
+}
+
 int main()
 {
   string path = "/home/ysuovnii/.config/hyprrestore/snapshots/snapshot.json";
@@ -37,7 +49,7 @@ int main()
     
     if(isBrowserApp(app, initialClass)) 
     {
-      string site = "https://" + initialTitle + "";
+      string site = "https://" + modifySite(initialTitle) + "";
       script = "xdg-open \"" + site + "\"";
     }
     else script = app + " &";
