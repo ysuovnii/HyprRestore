@@ -31,7 +31,8 @@ string modifySite(string site)
 
 int main()
 {
-  string path = "/home/ysuovnii/.config/hyprrestore/snapshots/snapshot.json";
+  string home = getenv("HOME");
+  string path = home + "/.local/share/hyprrestore/snapshots/snapshot.json";
   ifstream file(path);
   if(!file)
   {
@@ -52,10 +53,7 @@ int main()
     if(isBrowserApp(app, initialClass)) 
     {
       string site = "https://" + modifySite(initialTitle) + "";
-      script = ("xdg-open \"" + site + "\"");
-
-      // transform(script.begin(), script.end(), script.begin(), [](unsigned char c){ return std::tolower(c); });
-      
+      script = ("xdg-open \"" + site + "\"");      
     }
     else script = app + " &";
     

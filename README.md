@@ -30,17 +30,14 @@ hyprrestore/
 │   ├── save.cpp              # Session capture logic
 │   ├── restore.cpp           # Session restoration logic
 │
-├── build/
-│   ├── save                  # Compiled save binary
-│   ├── restore               # Compiled restore binary
-│
-├── snapshots/
-│   ├── snapshot.json         # Session data storage
-│
 ├── systemd/
 │   ├── hyprrestore-save.service
 │   ├── hyprrestore-save.timer
 │   ├── hyprrestore-restore.service
+│
+├── Install.sh
+├── Makefile
+├── Uninstall.sh
 │
 └── README.md
 ```

@@ -22,11 +22,16 @@ int main()
   }
   pclose(pipe);
   
-  string path = "/home/ysuovnii/.config/hyprrestore/snapshots/snapshot.json";
-  try {
-    create_directories("/home/ysuovnii/.config/hyprrestore/snapshots");
+  string home = getenv("HOME");
+  string dir = home + "/.local/share/hyprrestore/snapshots";
+  string path = dir + "/snapshot.json";
+  
+  try
+  {
+    create_directories(dir);
   }
-  catch(const filesystem_error& e) {
+  catch(const filesystem_error& e)
+  {
     cerr << "Filesystem error: " << e.what() << endl;
     return 1;
     
