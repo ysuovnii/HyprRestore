@@ -1,0 +1,10 @@
+[Unit]
+Description=HyprRestore Session Restore
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/hyprrestore-restore
+
+[Install]
+WantedBy=default.target

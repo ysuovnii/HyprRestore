@@ -3,10 +3,9 @@
 
 ## Features
 
-- Session snapshot capture (workspaces + applications)
-- Automatic session restore on login
+- Session snapshot capture (Hyprland clients)
+- Automatic restore on login
 - Systemd user service integration
-- Hyprland-native control via `hyprctl`
 - Lightweight C++ implementation with minimal dependencies
 - JSON-based snapshot storage
 
@@ -15,33 +14,30 @@
 HyprRestore is composed of two core components:
 
 - **Save Engine**
-  - Periodically captures active Hyprland state
-  - Stores data in structured JSON snapshots
+  - Captures active Hyprland client state
+  - Writes snapshot JSON to `~/.local/share/hyprrestore/snapshots`
 
 - **Restore Engine**
   - Reads saved snapshot
-  - Re-launches applications and reconstructs workspace layout
+  - Re-launches applications using the saved window class
 
 ## Project Structure
 
 ```bash
 hyprrestore/
 ├── src/
-│   ├── save.cpp              # Session capture logic
-│   ├── restore.cpp           # Session restoration logic
-│
-├── build/
-│   ├── save                  # Compiled save binary
-│   ├── restore               # Compiled restore binary
-│
-├── snapshots/
-│   ├── snapshot.json         # Session data storage
-│
+│   ├── save.cpp
+│   ├── restore.cpp
 ├── systemd/
-│   ├── hyprrestore-save.service
-│   ├── hyprrestore-save.timer
-│   ├── hyprrestore-restore.service
-│
+│   ├── hyprrestore.save.service
+│   ├── hyprrestore.save.timer
+│   ├── hyprrestore.restore.service
+├── build/
+│   ├── save
+│   ├── restore
+├── install.sh
+├── uninstall.sh
+├── Makefile
 └── README.md
 ```
 
@@ -49,58 +45,46 @@ hyprrestore/
 
 - Linux with Hyprland compositor
 - C++17 or later
-- systemd (user mode enabled)
+- `g++`
+- `libnlohmann-json-dev` or equivalent header-only JSON library
+- `systemd` user mode enabled
 - `hyprctl` available in PATH
-
 
 ## Installation
 
 ### 1. Clone Repository
-- ⚠️ Recommended location: `~/.config`
 ```bash
 git clone https://github.com/ysuovnii/hyprrestore.git
 cd hyprrestore
 ```
 
-### 2. Build the Project
+### 2. Build and Install
 ```bash
-mkdir -p build
-g++ src/save.cpp -o build/save
-g++ src/restore.cpp -o build/restore
+make
+./install.sh
 ```
 
-### 3. Install Systemd User Services
+### 3. Enable and Start Services
 ```bash
-mkdir -p ~/.config/systemd/user
-
-cp systemd/*.service ~/.config/systemd/user/
-cp systemd/*.timer ~/.config/systemd/user/
-
 systemctl --user daemon-reload
+systemctl --user enable hyprrestore.save.timer
+systemctl --user enable hyprrestore.restore.service
+systemctl --user start hyprrestore.save.timer
+systemctl --user start hyprrestore.restore.service
 ```
 
-### 4. Enable Service
-```bash
-systemctl --user enable hyprrestore-save.timer
-systemctl --user enable hyprrestore-restore.service
-```
-
-### 5. Start Services 
-```bash
-systemctl --user start hyprrestore-save.service
-systemctl --user start hyprrestore-restore.service
-```
+### 4. Snapshot Location
+- `~/.local/share/hyprrestore/snapshots/snapshot.json`
 
 ## Known Issues
-- Some applications may fail to launch if command mapping is incorrect (Flatpak vs native binaries)
-- Certain window classes require manual mapping in restore logic
-
+- Some applications may fail to launch if the recorded window class is not an executable name
+- Browser restore is best-effort and depends on the saved title format
 
 ## Roadmap
-- Flatpak + native app resolver
+- Flatpak / native app resolver
 - Multi-monitor layout restoration
 - Window geometry persistence
-- Improved error handling and recovery system
+- Improved error handling and recovery
 
 ## License
 
