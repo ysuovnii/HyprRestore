@@ -1,12 +1,10 @@
 [Unit]
 Description=HyprRestore Session Restore
-After=graphical-session.target
+After=default.target
 
 [Service]
-Type=simple
+Type=oneshot
 ExecStart=%h/.local/bin/hyprrestore-restore
-Restart=on-failure
-RestartSec=3
 
 [Install]
 WantedBy=default.target

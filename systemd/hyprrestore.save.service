@@ -2,9 +2,8 @@
 Description=HyprRestore Snapshot Save
 
 [Service]
-type=oneshot
+Type=oneshot
 ExecStart=%h/.local/bin/hyprrestore-save
-Restart=on-failure
 
 [Install]
 WantedBy=default.target

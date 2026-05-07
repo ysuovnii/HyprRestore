@@ -1,15 +1,18 @@
-#!/bin/bash 
+#!/bin/bash
+set -euo pipefail
 
-systemctl --user disable hyprrestore.save.timer
-systemctl --user disable hyprrestore.restore.service 
+echo "Removing HyprRestore..."
 
-systemctl --user stop hyprrestore.save.timer
-systmectl --user stop hyprrestore.restore.service 
+systemctl --user disable hyprrestore.save.timer || true
+systemctl --user disable hyprrestore.restore.service || true
+systemctl --user stop hyprrestore.save.timer || true
+systemctl --user stop hyprrestore.restore.service || true
 
 rm -f ~/.local/bin/hyprrestore-save
-rm -f ~/.local/bin/hyprrestore-restore 
-
-rm -f ~/.config/systemd/user/hyprrestore.*
+rm -f ~/.local/bin/hyprrestore-restore
+rm -f ~/.config/systemd/user/hyprrestore.save.service
+rm -f ~/.config/systemd/user/hyprrestore.save.timer
+rm -f ~/.config/systemd/user/hyprrestore.restore.service
 
 systemctl --user daemon-reload
 
