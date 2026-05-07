@@ -27,6 +27,6 @@ systemctl --user daemon-reload
 systemctl --user enable hyprrestore.save.timer
 systemctl --user enable hyprrestore.restore.service
 systemctl --user start hyprrestore.save.timer
-systemctl --user start hyprrestore.restore.service
 
 echo "HyprRestore installed successfully"
+echo "Run ~/.local/bin/hyprrestore-save once to create your first snapshot."
